@@ -11,6 +11,11 @@ const pool = require('./db/pool');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust Render's reverse proxy (needed for secure cookies over HTTPS)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
