@@ -90,6 +90,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.listen(PORT, () => {
-  console.log(`EpiTracker running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`EpiTracker running on http://0.0.0.0:${PORT}`);
 });
