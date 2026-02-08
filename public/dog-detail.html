@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dog Detail - EpiTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/dashboard" class="nav-brand">EpiTracker</a>
+    <div class="nav-right">
+      <a href="/dashboard" class="btn btn-small btn-secondary">Back</a>
+      <button id="logout-btn" class="btn btn-small">Log Out</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Dog Info Header -->
+    <section id="dog-info" class="dog-header">
+      <div class="loading">Loading...</div>
+    </section>
+
+    <!-- Action Buttons -->
+    <section class="action-bar">
+      <button id="add-event-btn" class="btn btn-primary">+ Log Event</button>
+      <button id="add-med-btn" class="btn btn-secondary">+ Add Medication</button>
+      <button id="edit-dog-btn" class="btn btn-secondary">Edit Dog</button>
+      <button id="delete-dog-btn" class="btn btn-danger">Delete Dog</button>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+      <label for="filter-type">Filter by type:</label>
+      <select id="filter-type">
+        <option value="">All Events</option>
+        <option value="full_seizure">Full Seizure</option>
+        <option value="partial_seizure">Partial Seizure</option>
+        <option value="trigger">Trigger</option>
+        <option value="post_ictal">Post-Ictal</option>
+        <option value="medication_change">Medication Change</option>
+        <option value="diet_change">Diet Change</option>
+        <option value="observation">Observation</option>
+      </select>
+      <label for="filter-start">From:</label>
+      <input type="date" id="filter-start">
+      <label for="filter-end">To:</label>
+      <input type="date" id="filter-end">
+      <button id="apply-filters" class="btn btn-small">Apply</button>
+    </section>
+
+    <!-- Medications -->
+    <section class="medications-section">
+      <h2>Medications</h2>
+      <div id="medications-list">
+        <div class="loading">Loading...</div>
+      </div>
+    </section>
+
+    <!-- Events Timeline -->
+    <section class="timeline-section">
+      <h2>Event Timeline</h2>
+      <div id="events-timeline">
+        <div class="loading">Loading...</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Event Modal -->
+  <div id="event-modal" class="modal" hidden>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="event-modal-title">Log Event</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <form id="event-form">
+        <input type="hidden" id="event-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="event-type">Type *</label>
+            <select id="event-type" required>
+              <option value="">Select type...</option>
+              <option value="full_seizure">Full Seizure</option>
+              <option value="partial_seizure">Partial Seizure</option>
+              <option value="trigger">Trigger</option>
+              <option value="post_ictal">Post-Ictal</option>
+              <option value="medication_change">Medication Change</option>
+              <option value="diet_change">Diet Change</option>
+              <option value="observation">Observation</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="event-severity">Severity</label>
+            <select id="event-severity">
+              <option value="">N/A</option>
+              <option value="mild">Mild</option>
+              <option value="moderate">Moderate</option>
+              <option value="severe">Severe</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="event-date">Date & Time *</label>
+            <input type="datetime-local" id="event-date" required>
+          </div>
+          <div class="form-group">
+            <label for="event-duration">Duration (seconds)</label>
+            <input type="number" id="event-duration" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="event-description">Description</label>
+          <textarea id="event-description" rows="3" placeholder="What happened?"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="event-notes">Notes</label>
+          <textarea id="event-notes" rows="2" placeholder="Any additional details..."></textarea>
+        </div>
+        <div id="event-form-error" class="error-msg" hidden></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Medication Modal -->
+  <div id="med-modal" class="modal" hidden>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="med-modal-title">Add Medication</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <form id="med-form">
+        <input type="hidden" id="med-id">
+        <div class="form-group">
+          <label for="med-name">Medication Name *</label>
+          <input type="text" id="med-name" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="med-dosage">Dosage</label>
+            <input type="text" id="med-dosage" placeholder="e.g., 250mg">
+          </div>
+          <div class="form-group">
+            <label for="med-frequency">Frequency</label>
+            <input type="text" id="med-frequency" placeholder="e.g., Twice daily">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="med-start">Start Date *</label>
+            <input type="date" id="med-start" required>
+          </div>
+          <div class="form-group">
+            <label for="med-end">End Date</label>
+            <input type="date" id="med-end">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="med-notes">Notes</label>
+          <textarea id="med-notes" rows="2"></textarea>
+        </div>
+        <div id="med-form-error" class="error-msg" hidden></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Dog Modal -->
+  <div id="edit-dog-modal" class="modal" hidden>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Dog</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <form id="edit-dog-form">
+        <div class="form-group">
+          <label for="edit-dog-name">Name *</label>
+          <input type="text" id="edit-dog-name" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-dog-breed">Breed</label>
+            <input type="text" id="edit-dog-breed">
+          </div>
+          <div class="form-group">
+            <label for="edit-dog-weight">Weight (lbs)</label>
+            <input type="number" id="edit-dog-weight" step="0.1" min="0">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-dog-dob">Date of Birth</label>
+            <input type="date" id="edit-dog-dob">
+          </div>
+          <div class="form-group">
+            <label for="edit-dog-diagnosis">Diagnosis Date</label>
+            <input type="date" id="edit-dog-diagnosis">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-dog-photo">Photo URL</label>
+          <input type="url" id="edit-dog-photo" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label for="edit-dog-notes">Notes</label>
+          <textarea id="edit-dog-notes" rows="3"></textarea>
+        </div>
+        <div id="edit-dog-error" class="error-msg" hidden></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/dog-detail.js"></script>
+</body>
+</html>

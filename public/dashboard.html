@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - EpiTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/dashboard" class="nav-brand">EpiTracker</a>
+    <div class="nav-right">
+      <span id="user-greeting"></span>
+      <button id="logout-btn" class="btn btn-small">Log Out</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="dashboard-header">
+      <h1>My Dogs</h1>
+      <button id="add-dog-btn" class="btn btn-primary">+ Add Dog</button>
+    </section>
+
+    <div id="dogs-list" class="dogs-grid">
+      <div class="loading">Loading...</div>
+    </div>
+
+    <section class="recent-events-section">
+      <h2>Recent Events</h2>
+      <div id="recent-events" class="events-list">
+        <div class="loading">Loading...</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add/Edit Dog Modal -->
+  <div id="dog-modal" class="modal" hidden>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="dog-modal-title">Add Dog</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <form id="dog-form">
+        <input type="hidden" id="dog-id">
+        <div class="form-group">
+          <label for="dog-name">Name *</label>
+          <input type="text" id="dog-name" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dog-breed">Breed</label>
+            <input type="text" id="dog-breed">
+          </div>
+          <div class="form-group">
+            <label for="dog-weight">Weight (lbs)</label>
+            <input type="number" id="dog-weight" step="0.1" min="0">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dog-dob">Date of Birth</label>
+            <input type="date" id="dog-dob">
+          </div>
+          <div class="form-group">
+            <label for="dog-diagnosis">Diagnosis Date</label>
+            <input type="date" id="dog-diagnosis">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="dog-photo">Photo URL</label>
+          <input type="url" id="dog-photo" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label for="dog-notes">Notes</label>
+          <textarea id="dog-notes" rows="3"></textarea>
+        </div>
+        <div id="dog-form-error" class="error-msg" hidden></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
