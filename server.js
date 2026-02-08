@@ -7,6 +7,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const path = require('path');
 const pool = require('./db/pool');
+const initSchema = require('./db/schema');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -95,6 +96,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`EpiTracker running on http://0.0.0.0:${PORT}`);
-});
+// Initialize database schema then start server
+initSchema()
+  .then(() => {
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`EpiTracker running on http://0.0.0.0:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Failed to initialize database:', err);
+    process.exit(1);
+  });
