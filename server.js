@@ -76,12 +76,12 @@ app.use('/api/dogs', requireAuth, require('./routes/dogs'));
 app.use('/api/medications', requireAuth, require('./routes/medications'));
 app.use('/api/events', requireAuth, require('./routes/events'));
 
-// Serve pages
-app.get('/dashboard', requireAuth, (req, res) => {
+// Serve pages (frontend JS handles auth redirect via /api/auth/me check)
+app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
-app.get('/dog/:id', requireAuth, (req, res) => {
+app.get('/dog/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dog-detail.html'));
 });
 
